@@ -1,19 +1,24 @@
-from flask import Flask, request, jsonify, send_file
-from generar_ficha import generar_ficha_con_datos
+from flask import Flask, request, jsonify
 import requests
 
 app = Flask(__name__)
 
 @app.route('/api/generar-ficha', methods=['POST'])
 def generar_ficha():
-    try:
-        payload = request.get_json()
-        app.logger.info(f"Payload recibido: {payload!r}")          # <-- Añade este log
-        imagen_url = payload.pop('imagen_url', None)
-        app.logger.info(f"imagen_url: {imagen_url}")               # <-- Y este
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No se recibió JSON"}), 400
 
-        if not imagen_url:
-            return jsonify({"status":"error","message":"No se recibió campo imagen_url"}), 400
+    imagen_url = data.get("imagen_url")
+    modelo = data.get("modelo")
+    matriculacion = data.get("matriculacion")
+    motor = data.get("motor")
+    traccion = data.get("traccion")
+    potencia = data.get("potencia")
+    procedencia = data.get("procedencia")
+
+    if not imagen_url:
+        return jsonify({"error": "Falta imagen_url"}), 400
 
         # Descarga de la imagen (aquí fallaba)
         coche_path = 'imagen_coche.jpg'
