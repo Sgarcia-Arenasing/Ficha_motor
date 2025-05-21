@@ -16,7 +16,7 @@ def generar_ficha():
 
     generar_ficha_con_datos(data, imagen_path)
 
-    return jsonify({"status": "ok", "mensaje": "Ficha generada con éxito"})
+    return send_file("ficha_final.png", mimetype="image/png")
 
 if __name__ == '__main__':
     app.run()
